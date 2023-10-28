@@ -17,6 +17,24 @@ function App() {
 		setValue("");
 	}
 
+	function toggleCheck(id, completed) {
+		setNoteList((currentNote) => {
+			return currentNote.map((note) => {
+				if (note.id === id) {
+					return { ...note, completed };
+				}
+
+				return note;
+			});
+		});
+	}
+
+	function deleteNote(id) {
+		setNoteList((currentNote) => {
+			return currentNote.filter((note) => note.id !== id)
+		});
+	}
+
 	return (
 		<>
 			<form onSubmit={formFn} className="flex flex-col gap-2 mb-2">
@@ -44,10 +62,14 @@ function App() {
 									className="w-4"
 									type="checkbox"
 									checked={note.completed}
+									onChange={(e) => toggleCheck(note.id, e.target.checked)}
 								/>
 								<p className="text-xl">{note.title}</p>
 							</label>
-							<button className="p-1 text-xs border rounded-md active:translate-y-[1px] transition-all duration-75">
+							<button
+								onClick={() => deleteNote(note.id)}
+								className="p-1 text-xs border rounded-md active:translate-y-[1px] transition-all duration-75"
+							>
 								DELETE
 							</button>
 						</li>
