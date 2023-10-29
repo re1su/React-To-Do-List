@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "./Form";
 import ToDoList from "./ToDoList";
 
 function App() {
-	const [noteList, setNoteList] = useState([]);
+	const [noteList, setNoteList] = useState(() => {
+		let localList = localStorage.getItem("NOTELIST")
+		if (localList == null) return []
 
+		return JSON.parse(localList)
+	});
+
+
+	useEffect(() => {
+		localStorage.setItem("NOTELIST", JSON.stringify(noteList))
+	}, [noteList])
+	
 
   function addNote(title) {
     setNoteList((currentNote) => {
@@ -28,6 +38,8 @@ function App() {
 			});
 		});
 	}
+
+
 
 	function deleteNote(id) {
 		setNoteList((currentNote) => {
